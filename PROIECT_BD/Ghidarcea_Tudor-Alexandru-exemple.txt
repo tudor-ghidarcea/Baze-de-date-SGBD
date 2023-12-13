@@ -1,0 +1,104 @@
+/*11*/
+
+/*I*/
+
+Select concat(p. nume_produs, ' ') || p.pret "Nume si pret produs"
+From produs p join garantie g on (p.id_garantie=g.id_garantie)
+Where durata_garantie=12
+
+/*II*/
+
+SELECT p.nume_produs, p.id_produs
+FROM produs p JOIN comanda_produs cp ON (p.id_produs=cp.id_produs)
+     JOIN comanda c ON (c.id_comanda=cp.id_comanda)
+     JOIN clienti cl ON (cl.id_client=c.id_client)
+WHERE UPPER(cl.nume_client)='IONESCU'
+order by p.id_produs
+
+/*III*/
+
+select c.id_comanda
+from comanda c
+ where c.id_comanda IN
+ (select cp.id_comanda
+  from comanda_produs cp
+   where cp.id_produs in
+   (select p.id_produs
+     from produs p
+      where p.id_garantie in
+      (select g.id_garantie
+     from garantie g
+    where g.durata_garantie=2)));
+
+/*IV*/
+
+select id_comanda,
+(select nume_firma_livrare
+  from firma_livrare
+   where c.id_livrare=id_livrare)  "Id firma livratoare",
+ (select nume_client
+   from clienti
+    where id_client=c.id_client) "Client"
+   from comanda c;
+
+/*V*/
+
+with total_durata as
+(select durata_garantie
+ from garantie g join produs p on(g.id_garantie=p.id_garantie)
+ where p.pret=200)
+select * from total_durata;
+
+
+
+
+
+
+/*12*/
+
+
+
+
+UPDATE PRODUS
+SET pret=pret/2
+WHERE pret IN(
+SELECT pret FROM PRODUS
+WHERE pret > 200);
+
+UPDATE CLIENTI
+SET nume_client='REDACTED'
+WHERE id_client in(
+select id_client from clienti 
+where id_client < 3);
+
+UPDATE GARANTIE
+SET durata_garantie = 2 where durata_garantie in(
+select durata_garantie from garantie
+where durata_garantie = 1);
+
+/*13*/
+
+CREATE SEQUENCE SEQ_MAGAZIN
+INCREMENT by 1
+START WITH 11
+MAXVALUE 10000
+NOCYCLE;
+insert into MAGAZIN values (SEQ_MAGAZIN.NEXTVAL, 'Vodafone', 1, 'Electronice', 3 );
+insert into MAGAZIN values (SEQ_MAGAZIN.NEXTVAL, 'Cosmote', 1, 'Electronice', 3);
+
+CREATE SEQUENCE SEQ_CLIENTI
+INCREMENT BY 1
+START WITH 11
+MAXVALUE 10000
+NOCYCLE;
+insert into CLIENTI values (SEQ_CLIENTI.NEXTVAL, 'Stanescu', 'Cristian', 'Bulevardul Eroilor 13');
+insert into CLIENTI values (SEQ_CLIENTI.NEXTVAL, 'Traian', 'Sorescu', 'Aleea Mestecenilor 3');
+
+CREATE SEQUENCE SEQ_COMENZI
+INCREMENT BY 1
+START WITH 11
+MAXVALUE 10000
+NOCYCLE;
+insert into COMANDA values(SEQ_COMENZI.NEXTVAL, 3, 5, 2);
+insert into COMANDA values (SEQ_COMENZI.NEXTVAL, 5, 2, 3);
+

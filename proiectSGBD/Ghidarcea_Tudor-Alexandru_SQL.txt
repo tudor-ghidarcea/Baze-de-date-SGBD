@@ -1,0 +1,382 @@
+/*ex 4*/
+
+create table PRODUS(
+    id_produs int primary key,
+    nume_produs varchar2(25),
+    pret float,
+    id_garantie int,
+    id_departament int)
+
+
+
+create table GARANTIE(
+id_garantie int primary key,
+nume_garantie varchar2(25),
+durata_garantie int)
+
+create table CLIENTI(
+id_client int primary key,
+nume_client varchar2(25),
+prenume_client varchar2(25),
+adresa_client varchar2(25))
+
+create table FIRMA_LIVRARE(
+id_livrare int primary key,
+nume_firma_livrare varchar2(25),
+zona_livrare varchar2(25)
+)
+
+
+create table LOCATIE(
+id_locatie int primary key,
+adresa varchar2(25))
+
+
+create table FIRMA_PUBLICITATE (
+id_firma_publicitate int primary key,
+nume_firma_publicitate varchar2(25))
+
+
+
+
+create table DEPARTAMENT(
+id_departament int primary key,
+nume_departament varchar2(25))
+
+
+
+create table MAGAZIN (
+id_magazin int primary key,
+nume_magazin varchar2(25),
+id_locatie references LOCATIE(id_locatie),
+tip_magazin varchar2(25),
+id_departament references DEPARTAMENT(id_departament))
+
+
+create table METODA_PLATA(
+id_plata int primary key,
+nume_metoda_plata varchar2(25))
+
+
+
+create table COMANDA (
+id_comanda int primary key,
+id_client references CLIENTI(id_client),
+id_livrare references FIRMA_LIVRARE(id_livrare),
+id_plata references METODA_PLATA(id_plata) )
+
+create table COMANDA_PRODUS(
+id_comanda references COMANDA(id_comanda),
+id_produs references PRODUS(id_produs))
+
+
+
+create table MAGAZIN_PUBLICITATE(
+id_magazin references MAGAZIN(id_magazin),
+id_firma_publicitate references FIRMA_PUBLICITATE(id_firma_publicitate))
+
+
+create table PRODUS_DEPARTAMENT(
+id_produs references PRODUS(id_produs),
+id_departament references DEPARTAMENT(id_departament))
+
+/*ex5*/
+
+insert into PRODUS values (1, 'Sapun Dove', 5, 0, 2);
+insert into PRODUS values (2, 'Televizor Samsung', 899.99, 2, 3);
+insert into PRODUS values (3, 'Ghiveci flori', 39, 0, 4);
+insert into PRODUS values (4, 'Ciocolata Milka', 4.99, 0, 1);
+insert into PRODUS values (6, 'Pereche sosete', 19.99, 0, 2);
+insert into PRODUS values (7, 'Manusa cuptor', 49.99, 0, 2);
+insert into PRODUS values (8, 'Husa scaun', 89.99, 0, 4);
+insert into PRODUS values (9, 'Termostat', 199.99, 1, 2);
+insert into PRODUS values (10, 'Saltea gonflabila', 59.99, 0, 5);
+insert into PRODUS values (5, 'Cartus imprimanta', 99.99, 1, 3);
+
+insert into GARANTIE values (1, 'Garantie standard', 1);
+insert into GARANTIE values (2, 'Garantie un an',12 );
+insert into GARANTIE values (3, 'Garantie extinsa', 24);
+insert into GARANTIE values (4, 'Garantie extra', 36);
+insert into GARANTIE values (5, 'Garantie 5 ani',60 );
+
+insert into CLIENTI values (1, 'Popescu', 'Ion', 'Calea Rahova 17');
+insert into CLIENTI values (2, 'Gheorghitoaia', 'Antonie', 'Bulevardul Eroilor 13');
+insert into CLIENTI values (3, 'Ionescu', 'Sorin', 'Libertatii 5');
+insert into CLIENTI values (4, 'Maria', 'Alexandra', 'Aleea Revolutiei 11');
+insert into CLIENTI values (10, 'Cretulescu', 'Alin', 'Calea Lalelelor 8');
+
+insert into FIRMA_LIVRARE values (1, 'Cargus', 'Timisoara');
+insert into FIRMA_LIVRARE values (2, 'Fan courier', 'Sibiu');
+insert into FIRMA_LIVRARE values (3, 'sc Romtrans srl', 'Gorj');
+insert into FIRMA_LIVRARE values (4, 'Glovo', 'Ramnicu Valcea');
+insert into FIRMA_LIVRARE values (5, 'Foodpanda', 'Tulcea');
+
+insert into LOCATIE values (1, 'calea Bucuresti 33');
+insert into LOCATIE values (2, 'ocolul Dumbravitei 21');
+insert into LOCATIE values (3, 'Olteniei 51');
+insert into LOCATIE values (4, 'Dunarii 75');
+insert into LOCATIE values (5, 'Dorohoiului 19');
+insert into FIRMA_PUBLICITATE values (1, 'Brandaffair');
+insert into FIRMA_PUBLICITATE values (2, 'Infodesign');
+insert into FIRMA_PUBLICITATE values (3, '3d Art Agency');
+insert into FIRMA_PUBLICITATE values (4, 'Web Ventures');
+insert into FIRMA_PUBLICITATE values (5, 'Hueman Advertising');
+insert into FIRMA_PUBLICITATE values (6, 'the Syndicate');
+insert into FIRMA_PUBLICITATE values (7, 'FCB Bucharest');
+insert into FIRMA_PUBLICITATE values (8, 'MSA BRANDING AND COMMUNICATION');
+insert into FIRMA_PUBLICITATE values (9, 'Google Adsense');
+insert into FIRMA_PUBLICITATE values (10, 'Facebook');
+
+
+insert into DEPARTAMENT values (1, 'Alimentare');
+insert into DEPARTAMENT values (2, 'Casnice');
+insert into DEPARTAMENT values (3, 'Electronice');
+insert into DEPARTAMENT values (4, 'Mobila');
+insert into DEPARTAMENT values (5, 'Rechizite');
+insert into DEPARTAMENT values (6, 'Medicamente');
+insert into DEPARTAMENT values (7, 'Produse de ingrijire');
+insert into DEPARTAMENT values (8, 'Produse de gradinarit');
+insert into DEPARTAMENT values (9, 'Produse de pescuit');
+insert into DEPARTAMENT values (10, 'Carti');
+
+insert into MAGAZIN values (1, 'MediaGalaxy', 1, 'Electronice', 3);
+insert into MAGAZIN values (2, 'Mobexpert', 2, 'Mobila', 4);
+insert into MAGAZIN values (3, 'Carrefour', 3, 'Alimentare', 1);
+insert into MAGAZIN values (4, 'Faber Kastell', 4, 'Rechizite', 5);
+insert into MAGAZIN values (5, 'Altex', 5, 'Electronice', 3);
+insert into MAGAZIN values (6, 'Emag', 4, 'Electronice', 3);
+insert into MAGAZIN values (7, 'Domo', 3, 'Casnice', 3);
+insert into MAGAZIN values (8, 'House of Games', 2, 'Jocuri video', 3);
+insert into MAGAZIN values (9, 'Billa', 1, 'Alimentare',1 );
+insert into MAGAZIN values (10, 'Penny', 2, 'Alimentare', 1);
+
+insert into METODA_PLATA values (1, 'Cash');
+insert into METODA_PLATA values (2, 'Card');
+insert into METODA_PLATA values (3, 'Bonuri de masa');
+insert into METODA_PLATA values (4, 'Credit');
+insert into METODA_PLATA values (5, 'Cec');
+
+insert into COMANDA values (1, 1, 1 , 1);
+insert into COMANDA values (2, 2, 2, 2);
+insert into COMANDA values (3, 3, 3, 3);
+insert into COMANDA values (4, 4, 4 , 4);
+insert into COMANDA values (5, 5, 5 , 5);
+insert into COMANDA values (6,5,5,5);
+insert into COMANDA values (7,4,4,4);
+insert into COMANDA values (8,3,3,3);
+insert into COMANDA values (9,2,2,2);
+insert into COMANDA values (10,1,1,1);
+insert into COMANDA_PRODUS values (1,1);
+insert into COMANDA_PRODUS values (2,2);
+insert into COMANDA_PRODUS values (3,3);
+insert into COMANDA_PRODUS values (4,4);
+insert into COMANDA_PRODUS values (5,5);
+insert into COMANDA_PRODUS values (6,6);
+insert into COMANDA_PRODUS values (7,7);
+insert into COMANDA_PRODUS values (8,8);
+insert into COMANDA_PRODUS values (9,9);
+insert into COMANDA_PRODUS values (10,10);
+
+insert into MAGAZIN_PUBLICITATE values (1,1);
+insert into MAGAZIN_PUBLICITATE values (2,2);
+insert into MAGAZIN_PUBLICITATE values (3,3);
+insert into MAGAZIN_PUBLICITATE values (4,4);
+insert into MAGAZIN_PUBLICITATE values (5,5);
+insert into MAGAZIN_PUBLICITATE values (6,6);
+insert into MAGAZIN_PUBLICITATE values (7,7);
+insert into MAGAZIN_PUBLICITATE values (8,8);
+insert into MAGAZIN_PUBLICITATE values (9,9);
+insert into MAGAZIN_PUBLICITATE values (10,10);
+
+insert into PRODUS_DEPARTAMENT values (1,1);
+insert into PRODUS_DEPARTAMENT values (2,2);
+insert into PRODUS_DEPARTAMENT values (3,3);
+insert into PRODUS_DEPARTAMENT values (4,4);
+insert into PRODUS_DEPARTAMENT values (5,5);
+insert into PRODUS_DEPARTAMENT values (6,6);
+insert into PRODUS_DEPARTAMENT values (7,7);
+insert into PRODUS_DEPARTAMENT values (8,8);
+insert into PRODUS_DEPARTAMENT values (9,9);
+insert into PRODUS_DEPARTAMENT values (10,10);
+
+/*ex6*/
+
+    CREATE OR REPLACE PROCEDURE procedura_6
+(v_produse_2 produs_departament.id_produs%type, v_produse_5 comanda_produs.id_produs%type )
+IS 
+  TYPE varray_produse_2 IS VARRAY(255) OF produs_departament.id_produs%type;
+  TYPE nested_table_produse_5 IS TABLE OF comanda_produs.id_produs%type;
+    varray_numar_dept varray_produse_2:=varray_produse_2();
+    nested_table_numar_com nested_table_produse_5:=nested_table_produse_5();
+BEGIN 
+   SELECT id_produs BULK COLLECT INTO varray_numar_dept FROM produs_departament;
+   SELECT id_produs BULK COLLECT INTO nested_table_numar_com FROM comanda_produs;
+   
+    for l_index in varray_numar_dept.FIRST..varray_numar_dept.LAST
+    LOOP
+    IF (v_produse_2>varray_numar_dept(l_index)) THEN
+    DBMS_OUTPUT.PUT_LINE('produs din produs_departament: '|| varray_numar_dept(l_index));
+    END IF;
+    
+    END LOOP;
+    
+    
+    for l_index in nested_table_numar_com.FIRST..nested_table_numar_com.LAST
+    LOOP
+    IF (v_produse_5>nested_table_numar_com(l_index)) THEN
+    DBMS_OUTPUT.PUT_LINE('produs din comanda_produs: '|| nested_table_numar_com(l_index));
+    END IF;
+    
+    END LOOP;
+END procedura_6;
+
+/*apel:*/
+
+begin
+    procedura_6(3,3);
+end;
+/
+
+/*ex7*/
+
+create or replace procedure procedura_7
+is variabila varchar2(255);
+cursor curs_produse is
+select nume_produs from produs
+where id_produs<=10;
+begin
+open curs_produse;
+loop
+fetch curs_produse into variabila;
+DBMS_OUTPUT.PUT_LINE(variabila);
+exit when curs_produse%notfound;
+end loop;
+close curs_produse;
+end;
+
+/*apel:*/
+execute procedura_7;
+
+
+/*ex8*/
+
+ create or replace function subprogram_ex8
+ (v_nume_produs produs.nume_produs%type)
+    return sys.odcivarchar2list
+  is
+    rezultat sys.odcivarchar2list;
+  begin
+    select nume_metoda_plata
+      bulk collect
+      into rezultat
+       FROM metoda_plata mp JOIN comanda c on mp.id_plata = c.id_plata
+		     JOIN comanda_produs cp on cp.id_comanda = c.id_comanda
+		     JOIN produs p on p.id_produs = cp.id_produs
+      WHERE upper(p.nume_produs)=upper(v_nume_produs);
+    return rezultat;
+    exception
+    when no_data_found 
+       then dbms_output.put_line('Nu au fost gasite date!');
+    when too_many_rows
+       then dbms_output.put_line('Eroare too many rows!');
+    when others
+       then dbms_output.put_line('Eroare!');
+
+end subprogram_ex8;
+/* Apel:*/
+begin
+    for cursor in (select * from table(subprogram_ex8('Husa Scaun'))) loop
+      dbms_output.put_line('Metoda de plata este: ' || cursor.column_value);
+    end loop;
+end;
+
+
+
+
+/*ex9*/
+
+create or replace procedure procedura_ex9
+(v_id_client clienti.id_client%type)
+is
+ TYPE tablou IS TABLE OF garantie.nume_garantie%type INDEX BY PLS_INTEGER;
+ v_tablou tablou; 
+begin
+SELECT nume_garantie 
+BULK COLLECT INTO v_tablou
+FROM garantie g JOIN produs p on p.id_garantie = g.id_garantie
+                JOIN comanda_produs cp on cp.id_produs = p.id_produs
+	        JOIN comanda c on c.id_comanda = cp.id_comanda
+	        JOIN clienti cl on c.id_client=cl.id_client 
+                     
+WHERE cl.id_client = v_id_client;
+
+FOR i in v_tablou.first..v_tablou.last loop
+ dbms_output.put_line(v_tablou(i));
+end loop;
+
+END procedura_ex9;
+/*apel*/
+begin
+procedura_ex9(1);
+end;
+
+/*ex10*/
+
+create or replace trigger trigger_10
+    before insert or update or delete on produs
+begin
+   if (to_char(sysdate,'D') = 1) or (to_char(sysdate, 'D')=6) or (to_char(sysdate,'HH24') not between 9 and 17)
+   then 
+   raise_application_error(-20001,'Nu puteti face modificari in afara programului de lucru!');
+    end if;
+    end;
+    /
+Insert into PRODUS  values (123,'Sapun Dove',5,0,1);
+    
+
+/*ex11*/
+create or replace trigger TRIGGER_11
+  before update of PRET on PRODUS
+  for each row
+  when (new.PRET > ((old.PRET+25*old.PRET)/100))
+begin
+  RAISE_APPLICATION_ERROR(-20002,'Pretul poate fi doar redus sau marit cu maxim 25%!');
+end;
+/
+
+
+    
+update PRODUS
+set PRET=1555 where ID_PRODUS=10;
+
+
+/*ex12*/
+
+CREATE TABLE audit_schema
+  (
+    ddl_date       DATE,
+    ddl_user       VARCHAR2(15),
+    object_created VARCHAR2(15),
+    object_name    VARCHAR2(15),
+    ddl_operation  VARCHAR2(15)
+  );
+ 
+ CREATE OR REPLACE TRIGGER audit_schema_tr
+AFTER DDL ON SCHEMA
+BEGIN
+    INSERT INTO audit_schema VALUES (
+sysdate, 
+sys_context('USERENV','CURRENT_USER'), 
+ora_dict_obj_type, 
+ora_dict_obj_name, 
+ora_sysevent);
+END;
+/
+
+truncate table garantie ;
+select * from audit_schema;
+rollback;
+/*
+reparat 8 (bulk collect) 9 ( exceptii) la 5 ss cu inserarile*/
+
+

@@ -1,0 +1,189 @@
+create table PRODUS(
+    id_produs int primary key,
+    nume_produs varchar2(25),
+    pret float,
+    id_garantie int,
+    id_departament int)
+insert into PRODUS values (1, 'Sapun Dove', 5, 0, 2);
+insert into PRODUS values (2, 'Televizor Samsung', 899.99, 2, 3);
+insert into PRODUS values (3, 'Ghiveci flori', 39, 0, 4);
+insert into PRODUS values (4, 'Ciocolata Milka', 4.99, 0, 1);
+insert into PRODUS values (6, 'Pereche sosete', 19.99, 0, 2);
+insert into PRODUS values (7, 'Manusa cuptor', 49.99, 0, 2);
+insert into PRODUS values (8, 'Husa scaun', 89.99, 0, 4);
+insert into PRODUS values (9, 'Termostat', 199.99, 1, 2);
+insert into PRODUS values (10, 'Saltea gonflabila', 59.99, 0, 5);
+insert into PRODUS values (5, 'Cartus imprimanta', 99.99, 1, 3);
+
+
+
+create table GARANTIE(
+id_garantie int primary key,
+nume_garantie varchar2(25),
+durata_garantie int)
+
+insert into GARANTIE values (1, 'Garantie standard', 1);
+insert into GARANTIE values (2, 'Garantie un an',12 );
+insert into GARANTIE values (3, 'Garantie extinsa', 24);
+insert into GARANTIE values (4, 'Garantie extra', 36);
+insert into GARANTIE values (5, 'Garantie 5 ani',60 );
+
+create table CLIENTI(
+id_client int primary key,
+nume_client varchar2(25),
+prenume_client varchar2(25),
+adresa_client varchar2(25))
+
+insert into CLIENTI values (1, 'Popescu', 'Ion', 'Calea Rahova 17');
+insert into CLIENTI values (2, 'Gheorghitoaia', 'Antonie', 'Bulevardul Eroilor 13');
+insert into CLIENTI values (3, 'Ionescu', 'Sorin', 'Libertatii 5');
+insert into CLIENTI values (4, 'Maria', 'Alexandra', 'Aleea Revolutiei 11');
+
+create table FIRMA_LIVRARE(
+id_livrare int primary key,
+nume_firma_livrare varchar2(25),
+zona_livrare varchar2(25)
+)
+
+insert into FIRMA_LIVRARE values (1, 'Cargus', 'Timisoara');
+insert into FIRMA_LIVRARE values (2, 'Fan courier', 'Sibiu');
+insert into FIRMA_LIVRARE values (3, 'sc Romtrans srl', 'Gorj');
+insert into FIRMA_LIVRARE values (4, 'Glovo', 'Ramnicu Valcea');
+insert into FIRMA_LIVRARE values (5, 'Foodpanda', 'Tulcea');
+
+create table LOCATIE(
+id_locatie int primary key,
+adresa varchar2(25))
+
+insert into LOCATIE values (1, 'calea Bucuresti 33');
+insert into LOCATIE values (2, 'ocolul Dumbravitei 21');
+insert into LOCATIE values (3, 'Olteniei 51');
+insert into LOCATIE values (4, 'Dunarii 75');
+insert into LOCATIE values (5, 'Dorohoiului 19');
+
+create table FIRMA_PUBLICITATE (
+id_firma_publicitate int primary key,
+nume_firma_publicitate varchar2(25))
+
+
+insert into FIRMA_PUBLICITATE values (1, 'Brandaffair');
+insert into FIRMA_PUBLICITATE values (2, 'Infodesign');
+insert into FIRMA_PUBLICITATE values (3, '3d Art Agency');
+insert into FIRMA_PUBLICITATE values (4, 'Web Ventures');
+insert into FIRMA_PUBLICITATE values (5, 'Hueman Advertising');
+insert into FIRMA_PUBLICITATE values (6, 'the Syndicate');
+insert into FIRMA_PUBLICITATE values (7, 'FCB Bucharest');
+insert into FIRMA_PUBLICITATE values (8, 'MSA BRANDING AND COMMUNICATION');
+insert into FIRMA_PUBLICITATE values (9, 'Google Adsense');
+insert into FIRMA_PUBLICITATE values (10, 'Facebook');
+
+
+create table DEPARTAMENT(
+id_departament int primary key,
+nume_departament varchar2(25))
+
+insert into DEPARTAMENT values (1, 'Alimentare');
+insert into DEPARTAMENT values (2, 'Casnice');
+insert into DEPARTAMENT values (3, 'Electronice');
+insert into DEPARTAMENT values (4, 'Mobila');
+insert into DEPARTAMENT values (5, 'Rechizite');
+insert into DEPARTAMENT values (6, 'Medicamente');
+insert into DEPARTAMENT values (7, 'Produse de ingrijire');
+insert into DEPARTAMENT values (8, 'Produse de gradinarit');
+insert into DEPARTAMENT values (9, 'Produse de pescuit');
+insert into DEPARTAMENT values (10, 'Carti');
+
+
+create table MAGAZIN (
+id_magazin int primary key,
+nume_magazin varchar2(25),
+id_locatie references LOCATIE(id_locatie),
+tip_magazin varchar2(25),
+id_departament references DEPARTAMENT(id_departament))
+
+insert into MAGAZIN values (1, 'MediaGalaxy', 1, 'Electronice', 3);
+insert into MAGAZIN values (2, 'Mobexpert', 2, 'Mobila', 4);
+insert into MAGAZIN values (3, 'Carrefour', 3, 'Alimentare', 1);
+insert into MAGAZIN values (4, 'Faber Kastell', 4, 'Rechizite', 5);
+insert into MAGAZIN values (5, 'Altex', 5, 'Electronice', 3);
+insert into MAGAZIN values (6, 'Emag', 4, 'Electronice', 3);
+insert into MAGAZIN values (7, 'Domo', 3, 'Casnice', 3);
+insert into MAGAZIN values (8, 'House of Games', 2, 'Jocuri video', 3);
+insert into MAGAZIN values (9, 'Billa', 1, 'Alimentare',1 );
+insert into MAGAZIN values (10, 'Penny', 2, 'Alimentare', 1);
+
+
+create table METODA_PLATA(
+id_plata int primary key,
+nume_metoda_plata varchar2(25))
+
+insert into METODA_PLATA values (1, 'Cash');
+insert into METODA_PLATA values (2, 'Card');
+insert into METODA_PLATA values (3, 'Bonuri de masa');
+insert into METODA_PLATA values (4, 'Credit');
+insert into METODA_PLATA values (5, 'Cec');
+
+
+
+create table COMANDA (
+id_comanda int primary key,
+id_client references CLIENTI(id_client),
+id_livrare references FIRMA_LIVRARE(id_livrare),
+id_plata references METODA_PLATA(id_plata) )
+
+insert into COMANDA values (1, 1, 1 , 1);
+insert into COMANDA values (2, 2, 2, 2);
+insert into COMANDA values (3, 3, 3, 3);
+insert into COMANDA values (4, 4, 4 , 4);
+insert into COMANDA values (5, 5, 5 , 5);
+insert into COMANDA values (6,5,5,5);
+insert into COMANDA values (7,4,4,4);
+insert into COMANDA values (8,3,3,3);
+insert into COMANDA values (9,2,2,2);
+insert into COMANDA values (10,1,1,1);
+
+create table COMANDA_PRODUS(
+id_comanda references COMANDA(id_comanda),
+id_produs references PRODUS(id_produs))
+
+insert into COMANDA_PRODUS values (1,1);
+insert into COMANDA_PRODUS values (2,2);
+insert into COMANDA_PRODUS values (3,3);
+insert into COMANDA_PRODUS values (4,4);
+insert into COMANDA_PRODUS values (5,5);
+insert into COMANDA_PRODUS values (6,6);
+insert into COMANDA_PRODUS values (7,7);
+insert into COMANDA_PRODUS values (8,8);
+insert into COMANDA_PRODUS values (9,9);
+insert into COMANDA_PRODUS values (10,10);
+
+
+create table MAGAZIN_PUBLICITATE(
+id_magazin references MAGAZIN(id_magazin),
+id_firma_publicitate references FIRMA_PUBLICITATE(id_firma_publicitate))
+
+insert into MAGAZIN_PUBLICITATE values (1,1);
+insert into MAGAZIN_PUBLICITATE values (2,2);
+insert into MAGAZIN_PUBLICITATE values (3,3);
+insert into MAGAZIN_PUBLICITATE values (4,4);
+insert into MAGAZIN_PUBLICITATE values (5,5);
+insert into MAGAZIN_PUBLICITATE values (6,6);
+insert into MAGAZIN_PUBLICITATE values (7,7);
+insert into MAGAZIN_PUBLICITATE values (8,8);
+insert into MAGAZIN_PUBLICITATE values (9,9);
+insert into MAGAZIN_PUBLICITATE values (10,10);
+
+create table PRODUS_DEPARTAMENT(
+id_produs references PRODUS(id_produs),
+id_departament references DEPARTAMENT(id_departament))
+
+insert into PRODUS_DEPARTAMENT values (1,1);
+insert into PRODUS_DEPARTAMENT values (2,2);
+insert into PRODUS_DEPARTAMENT values (3,3);
+insert into PRODUS_DEPARTAMENT values (4,4);
+insert into PRODUS_DEPARTAMENT values (5,5);
+insert into PRODUS_DEPARTAMENT values (6,6);
+insert into PRODUS_DEPARTAMENT values (7,7);
+insert into PRODUS_DEPARTAMENT values (8,8);
+insert into PRODUS_DEPARTAMENT values (9,9);
+insert into PRODUS_DEPARTAMENT values (10,10);

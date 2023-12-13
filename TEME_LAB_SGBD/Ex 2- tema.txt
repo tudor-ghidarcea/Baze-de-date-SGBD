@@ -1,0 +1,238 @@
+--EX 2
+
+--a
+/
+DROP TABLE EXCURSIE_GTA;
+CREATE TABLE excursie_GTA(
+cod_excursie NUMBER(4) CONSTRAINT PK_COD_EXC999 PRIMARY KEY,
+denumire VARCHAR2(20),
+orase tip_orase_gta,
+status VARCHAR2(15) CONSTRAINT CHK_STATUS999 CHECK (STATUS IN ('DISPONIBIL', 'ANULAT')))
+NESTED TABLE orase STORE AS tabel_orase_gta;
+
+
+
+ALTER TABLE excursie_GTA ADD (orase tip_orase_GTA)NESTED TABLE orase STORE AS tip_orase_GTA2;
+                           
+INSERT into excursie_GTA
+VALUES (100, 'Montenegro',tip_orase_GTA('ljubliana','tirana'), 'DISPONIBIL');
+
+INSERT into excursie_GTA
+VALUES (200, 'Albania',tip_orase_GTA('Tirana','Ljubliana'), 'ANULAT');
+                           
+INSERT into excursie_GTA
+VALUES (300, 'Italia', tip_orase_GTA('Napoli','Venetia'), 'DISPONIBIL');
+                           
+INSERT into excursie_GTA
+VALUES (400, 'Italia', tip_orase_GTA('Venetia','Napoli'), 'ANULAT');
+                           
+INSERT into excursie_GTA
+VALUES (500, 'Spania', tip_orase_GTA('Madrid','Venetia'), 'ANULAT');
+
+--b
+--adăugați un oraș nou în listă, ce va fi ultimul vizitat în excursia respectivă
+DECLARE
+v_id EXCURSIE_GTA.cod_excursie%type := &p_id;
+v_lista_orase tip_orase_GTA;
+v_nou_oras VARCHAR2(100) :='&p_oras';
+begin
+
+select orase
+into v_lista_orase
+from excursie_GTA
+where cod_excursie= v_id;
+
+--adaugati un oras nou in lista(la final)
+v_lista_orase.extend();
+v_lista_orase(v_lista_orase.last) := v_nou_oras;
+
+--a adaugat la prima excursie orasul Pitesti
+update excursie_GTA
+set orase= v_lista_orase
+where cod_excursie= v_id;
+
+end;
+/
+
+commit;
+rollback;
+select * from excursie_GTA;
+
+--adăugați un oraș nou în listă, ce va fi al doilea oraș vizitat în excursia respectivă
+/
+DECLARE
+v_id EXCURSIE_GTA.cod_excursie%type := &p_id;
+v_lista_orase tip_orase_GTA;
+v_nou_oras VARCHAR2(100) :='&p_oras';
+begin
+
+select orase
+into v_lista_orase
+from excursie_GTA
+where cod_excursie= v_id;
+
+--facem loc pe pozitia 2 si copiem toate elementele cu o pozitie la dreapta
+v_lista_orase.extend();
+for i in reverse 3..v_lista_orase.last LOOP
+v_lista_orase(i):=v_lista_orase(i-1);
+end loop;
+
+v_lista_orase(2):=v_nou_oras;
+
+update excursie_GTA
+set orase= v_lista_orase
+where cod_excursie= v_id;
+
+end;
+/
+select * from excursie_GTA;
+
+--inversați ordinea de vizitare a două dintre orașe al căror nume este specificat;
+/
+DECLARE
+v_id EXCURSIE_GTA.cod_excursie%type := &p_id;
+v_primul_oras VARCHAR2(100) :='&p_oras1';
+v_aldoilea_oras  VARCHAR2(100) :='&p_oras2';
+v_lista_orase tip_orase_GTA;
+begin
+
+select orase
+into v_lista_orase
+from excursie_GTA
+where cod_excursie= v_id;
+
+--punem in locul primului oras pe al doilea si invers
+for i in 1..v_lista_orase.last LOOP
+if v_lista_orase(i)=v_primul_oras then
+v_lista_orase(i):=v_aldoilea_oras;
+else
+if v_lista_orase(i)=v_aldoilea_oras then
+v_lista_orase(i):=v_primul_oras;
+end if;
+end if;
+end loop;
+
+update excursie_GTA
+set orase= v_lista_orase
+where cod_excursie= v_id;
+
+end;
+/
+select * from excursie_GTA;
+rollback;
+
+--eliminați din listă un oraș al cărui nume este specificat
+/
+DECLARE
+v_id EXCURSIE_GTA.cod_excursie%type := &p_id;
+v_oras VARCHAR2(100) :='&p_oras';
+v_lista_orase tip_orase_GTA;
+begin
+
+select orase
+into v_lista_orase
+from excursie_GTA
+where cod_excursie= v_id;
+
+
+for i in 1..v_lista_orase.last LOOP
+if v_lista_orase(i)=v_oras then
+v_lista_orase.delete(i);
+end if;
+end loop;
+
+update excursie_GTA
+set orase= v_lista_orase
+where cod_excursie= v_id;
+
+end;
+/
+
+--c.Pentru o excursie al cărui cod este dat, afișați numărul de orașe vizitate, respectiv numele orașelor.
+
+/
+DECLARE
+v_id EXCURSIE_GTA.cod_excursie%type := &p_id;
+v_numar number(5):= 0;
+v_lista_orase tip_orase_GTA;
+begin
+
+select orase
+into v_lista_orase
+from excursie_GTA
+where cod_excursie= v_id;
+
+--numaram cate orase se gasesc si le afisez
+for i in 1..v_lista_orase.last LOOP
+v_numar := v_numar +1;
+DBMS_OUTPUT.PUT(v_lista_orase(i)|| ' ');
+end loop;
+
+DBMS_OUTPUT.PUT_LINE('');
+DBMS_OUTPUT.PUT_LINE('Se viziteaza: '||v_numar||' orase');
+end;
+/
+
+--d.Pentru fiecare excursie afișați lista orașelor vizitate.
+
+/
+DECLARE
+
+TYPE tablou_indexat IS TABLE OF excursie_GTA%ROWTYPE INDEX BY BINARY_INTEGER;
+t    tablou_indexat;
+
+begin
+
+--pun toata tabela excursie_GTA intr-un tablou indexat
+SELECT *
+BULK COLLECT INTO t
+FROM excursie_GTA;
+
+--parcurg tabloul afisand denimirea si parcurgand fiecare lista de orase in parte ca sa afisez orasele
+FOR i IN t.FIRST..t.LAST LOOP
+      DBMS_OUTPUT.PUT_line(t(i).denumire || ' : ');
+      for j in t(i).orase.first..t(i).orase.last loop
+      DBMS_OUTPUT.PUT(t(i).orase(j) || ' ');
+      end loop;
+      DBMS_OUTPUT.PUT_line('');
+      DBMS_OUTPUT.PUT_line('');
+END LOOP;
+end;
+/
+select * from excursie_GTA;
+
+--e.Anulați excursiile cu cele mai puține orașe vizitate. (DIFICULTATE MEDIE)
+/
+declare 
+nr_min number(3) :=0;
+TYPE tablou_indexat IS TABLE OF excursie_GTA%ROWTYPE INDEX BY BINARY_INTEGER;
+t tablou_indexat;
+begin
+
+SELECT *
+BULK COLLECT INTO t
+FROM excursie_GTA;
+
+nr_min:=t(1).orase.count;
+--calculez minimul de elemente din listele de orase
+for i in 2..t.last loop
+    if t(i).orase.count<nr_min then
+    nr_min:=t(i).orase.count;
+    end if;
+end loop;
+
+for i in 1..t.last loop
+    if t(i).orase.count=nr_min then
+    
+    update excursie_GTA
+    set status='ANULAT'
+    where cod_excursie=t(i).cod_excursie;
+    
+    end if;
+end loop;
+
+
+end;
+/
+select * from excursie_GTA;
+rollback;
